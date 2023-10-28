@@ -11,6 +11,7 @@ import ReactStars from "react-rating-stars-component";
 import { useSession } from "../hooks/useSession";
 import ReCAPTCHA from "react-google-recaptcha";
 import { RECAPTCHA_SITE_KEY } from "../utils/env";
+import { can } from "../utils/can";
 
 export const Producto = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export const Producto = () => {
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
   const [captcha, setCaptcha] = useState(null);
+  const [userCan, setUserCan] = useState(false);
 
   const [values, setValues] = useState({
     calificacion: 5,
@@ -108,6 +110,10 @@ export const Producto = () => {
     setLoading(false);
   }, [id]);
 
+  useEffect(() => {
+    can(session?.user?.id, "EDITAR_PRODUCTO").then((res) => setUserCan(res));
+  }, [session?.user?.id]);
+
   if (loading || !producto) {
     return;
   }
@@ -140,20 +146,24 @@ export const Producto = () => {
               <div className="d-flex justify-content-between">
                 <h2 className="card-title">{producto?.nombre}</h2>
 
-                <div className="d-flex gap-3">
-                  <Link to={`/editar-producto/${id}`}>
-                    <button className="btn btn-outline-primary">Editar</button>
-                  </Link>
+                {userCan && (
+                  <div className="d-flex gap-3">
+                    <Link to={`/editar-producto/${id}`}>
+                      <button className="btn btn-outline-primary">
+                        Editar
+                      </button>
+                    </Link>
 
-                  <Link to="#">
-                    <button
-                      className="btn btn-outline-danger"
-                      onClick={handleDelete}
-                    >
-                      Eliminar
-                    </button>
-                  </Link>
-                </div>
+                    <Link to="#">
+                      <button
+                        className="btn btn-outline-danger"
+                        onClick={handleDelete}
+                      >
+                        Eliminar
+                      </button>
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <p className="card-text">{producto?.descripcion}</p>
