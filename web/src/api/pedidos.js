@@ -31,6 +31,30 @@ export const createPedido = async (params) => {
   }
 };
 
+export const updateEstadoPedido = async (params, usuarioId) => {
+  try {
+    const { pedidoId, estado } = params;
+
+    const data = await fetch(`${API_URL}/pedidos/${pedidoId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        estado,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    }).then((data) => data.json());
+
+    return data;
+  } catch (error) {
+    console.error(`Error in updateEstadoPedido: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};
+
 export const createDetallePedido = async (params) => {
   try {
     const { pedidoId, productoId, cantidad, precioUnitario, subtotal } = params;
@@ -58,11 +82,12 @@ export const createDetallePedido = async (params) => {
   }
 };
 
-export const getPedidos = async (usuarioId) => {
+export const getPedidos = async (usuarioId, rol) => {
   try {
-    const url = usuarioId
-      ? `${API_URL}/pedidos?usuario_id=${usuarioId}`
-      : `${API_URL}/pedidos`;
+    const url =
+      usuarioId && rol !== "admin"
+        ? `${API_URL}/pedidos?usuario_id=${usuarioId}`
+        : `${API_URL}/pedidos`;
 
     const response = await fetch(url, {
       headers: {

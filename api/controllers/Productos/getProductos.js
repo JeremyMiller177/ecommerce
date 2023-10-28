@@ -7,7 +7,7 @@ const getProductos = async (req, res) => {
     const rows = await sql.select('Producto', ['*'], {
       categoria_id: categoriaId,
       is_disabled: false
-    })
+    }) ?? []
 
     res.json(rows)
   } catch (error) {
