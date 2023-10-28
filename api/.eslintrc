@@ -1,0 +1,9 @@
+{
+  "extends": "standard",
+  "plugins": ["import"],
+  "rules": {
+    "no-console": "off",
+    "import/newline-after-import": "error",
+    "import/no-unresolved": "off"
+  }
+}
