@@ -11,7 +11,8 @@ export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { session, clearSession } = useSession();
-  const [userCan, setUserCan] = useState(false)
+  const [userCan, setUserCan] = useState(false);
+  const [userCanAdminPedidos, setUserCanAdminPedidos] = useState(false);
   const { items } = useCart();
 
   const handleClick = () => {
@@ -20,8 +21,11 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
-    can(session?.user?.id, 'CREAR_PRODUCTO').then(res => setUserCan(res))
-  }, [session?.user?.id])
+    can(session?.user?.id, "CREAR_PRODUCTO").then((res) => setUserCan(res));
+    can(session?.user?.id, "EDITAR_PEDIDO").then((res) =>
+      setUserCanAdminPedidos(res)
+    );
+  }, [session?.user?.id]);
 
   return (
     <div
@@ -76,6 +80,19 @@ export const Navbar = () => {
               to="/crear-producto"
             >
               Crear producto
+            </Link>
+          )}
+
+          {userCanAdminPedidos && (
+            <Link
+              className={`nav-link rounded-5 text-center ${
+                location.pathname === "/administrar-pedidos"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              }`}
+              to="/administrar-pedidos"
+            >
+              Administrar pedidos
             </Link>
           )}
         </div>
