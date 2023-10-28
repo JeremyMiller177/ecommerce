@@ -31,7 +31,7 @@ export const Navbar = () => {
                 className="img-fluid"
                 src={shoppingCart}
               />
-              <h3 className="text-white pt-3">MoranShop</h3>
+              <h3 className="text-white pt-3">MillerShop</h3>
             </div>
           </Link>
 
