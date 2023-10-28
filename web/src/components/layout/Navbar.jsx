@@ -4,17 +4,24 @@ import shoppingCartIcon from "../../assets/img/shopping-cart-icon.png";
 import avatar from "../../assets/img/default-avatar.svg";
 import { useSession } from "../../hooks/useSession";
 import { useCart } from "../../hooks/useCart";
+import { can } from "../../utils/can";
+import { useEffect, useState } from "react";
 
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { session, clearSession } = useSession();
+  const [userCan, setUserCan] = useState(false)
   const { items } = useCart();
 
   const handleClick = () => {
     clearSession();
     navigate("/productos");
   };
+
+  useEffect(() => {
+    can(session?.user?.id, 'CREAR_PRODUCTO').then(res => setUserCan(res))
+  }, [session?.user?.id])
 
   return (
     <div
@@ -56,6 +63,19 @@ export const Navbar = () => {
               to="/mis-pedidos"
             >
               Mis pedidos
+            </Link>
+          )}
+
+          {userCan && (
+            <Link
+              className={`nav-link rounded-5 text-center ${
+                location.pathname === "/crear-producto"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              }`}
+              to="/crear-producto"
+            >
+              Crear producto
             </Link>
           )}
         </div>

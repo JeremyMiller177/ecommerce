@@ -56,3 +56,29 @@ export const crearUsuario = async (params) => {
     );
   }
 };
+
+export const getSession = async (usuarioId) => {
+  try {
+    const response = await fetch(`${API_URL}/sesion`, {
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error(
+        "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+      );
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error(`Error in getSession: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};

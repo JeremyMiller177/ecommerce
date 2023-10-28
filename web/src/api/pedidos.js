@@ -6,7 +6,7 @@ export const createPedido = async (params) => {
     const { usuarioId, tipoPagoId, nombre, email, telefono, direccion, total } =
       params;
 
-    const data = await fetch("http://localhost:3001/pedidos", {
+    const data = await fetch(`${API_URL}/pedidos`, {
       method: "POST",
       body: JSON.stringify({
         usuarioId,
@@ -24,7 +24,7 @@ export const createPedido = async (params) => {
 
     return data;
   } catch (error) {
-    console.error(`Error in crearPedido: ${error}`);
+    console.error(`Error in createPedido: ${error}`);
     toast.error(
       "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
     );
@@ -35,7 +35,7 @@ export const createDetallePedido = async (params) => {
   try {
     const { pedidoId, productoId, cantidad, precioUnitario, subtotal } = params;
 
-    const data = await fetch("http://localhost:3001/detalles-pedido", {
+    const data = await fetch(`${API_URL}/detalles-pedido`, {
       method: "POST",
       body: JSON.stringify({
         pedidoId,

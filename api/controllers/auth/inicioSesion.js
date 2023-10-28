@@ -46,6 +46,9 @@ const inicioSesion = async (req, res) => {
 
     delete user.contrasena
 
+    const rol = await sql.select('Rol', ['*'], { id: user.rol_id })
+    user.rol = rol[0]
+
     res.json({ session: { user, token, expiresIn } })
   } catch (error) {
     console.error(error)

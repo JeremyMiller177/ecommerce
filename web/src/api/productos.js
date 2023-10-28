@@ -54,3 +54,30 @@ export const getProducto = async (id) => {
     );
   }
 };
+
+export const createProducto = async (params, usuarioId) => {
+  try {
+    const { categoriaId, nombre, descripcion, precio } = params;
+
+    const data = await fetch(`${API_URL}/productos`, {
+      method: "POST",
+      body: JSON.stringify({
+        categoriaId,
+        nombre,
+        descripcion,
+        precio,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    }).then((data) => data.json());
+
+    return data;
+  } catch (error) {
+    console.error(`Error in createProducto: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};

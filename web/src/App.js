@@ -13,6 +13,7 @@ import { Producto } from "./pages/Producto";
 import { Checkout } from "./pages/Checkout";
 import { Carrito } from "./pages/Carrito";
 import { MisPedidos } from "./pages/MisPedidos";
+import { CrearProducto } from "./pages/CrearProducto";
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
 
                   {session && (
                     <Route path="mis-pedidos" element={<MisPedidos />} />
+                  )}
+
+                  {session && (
+                    <Route path="crear-producto" element={<CrearProducto />} />
                   )}
 
                   <Route path="productos" element={<Productos />} />
