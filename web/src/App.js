@@ -14,6 +14,7 @@ import { Checkout } from "./pages/Checkout";
 import { Carrito } from "./pages/Carrito";
 import { MisPedidos } from "./pages/MisPedidos";
 import { CrearProducto } from "./pages/CrearProducto";
+import { EditarProducto } from "./pages/EditarProducto";
 
 function App() {
   return (
@@ -48,6 +49,13 @@ function App() {
 
                   {session && (
                     <Route path="crear-producto" element={<CrearProducto />} />
+                  )}
+
+                  {session && (
+                    <Route
+                      path="editar-producto/:id"
+                      element={<EditarProducto />}
+                    />
                   )}
 
                   <Route path="productos" element={<Productos />} />

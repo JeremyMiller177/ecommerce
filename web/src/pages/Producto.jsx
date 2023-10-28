@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getProducto } from "../api/productos";
-import { Link, useParams } from "react-router-dom";
+import { deleteProducto, getProducto } from "../api/productos";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import noImage from "../assets/img/no-image.png";
 import shoppingCartIcon from "../assets/img/shopping-cart-icon.png";
 import "./styles.css";
@@ -16,6 +16,7 @@ export const Producto = () => {
   const { id } = useParams();
   const { addItem } = useCart();
   const { session } = useSession();
+  const navigate = useNavigate();
 
   const [producto, setProducto] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -82,6 +83,16 @@ export const Producto = () => {
     setLoading(false);
   };
 
+  const handleDelete = async () => {
+    setLoading(true);
+
+    await deleteProducto(id, session?.user?.id);
+
+    toast.success("El producto ha sido eliminado correctamente.");
+    navigate("/productos");
+    setLoading(false);
+  };
+
   const parseDate = (date) => {
     const fecha = new Date(date);
     const dia = fecha.getDate().toString().padStart(2, "0");
@@ -126,7 +137,25 @@ export const Producto = () => {
 
           <div className="d-flex flex-column justify-content-between card-body shadow-lg h-100 w-50">
             <div className="h-100">
-              <h2 className="card-title">{producto?.nombre}</h2>
+              <div className="d-flex justify-content-between">
+                <h2 className="card-title">{producto?.nombre}</h2>
+
+                <div className="d-flex gap-3">
+                  <Link to={`/editar-producto/${id}`}>
+                    <button className="btn btn-outline-primary">Editar</button>
+                  </Link>
+
+                  <Link to="#">
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={handleDelete}
+                    >
+                      Eliminar
+                    </button>
+                  </Link>
+                </div>
+              </div>
+
               <p className="card-text">{producto?.descripcion}</p>
 
               <span className="badge bg-success mb-4">

@@ -2,7 +2,8 @@ const { sql } = require('../../utils/db')
 
 const updateProducto = async (req, res) => {
   const id = req.params.id
-  const { categoriaId, nombre, descripcion, precio, stock } = req.body
+  const { categoriaId, nombre, descripcion, precio, stock, isDisabled } =
+    req.body
 
   try {
     const fields = {
@@ -10,7 +11,8 @@ const updateProducto = async (req, res) => {
       nombre,
       descripcion,
       precio,
-      stock
+      stock,
+      is_disabled: isDisabled
     }
 
     const where = {

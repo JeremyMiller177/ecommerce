@@ -81,3 +81,52 @@ export const createProducto = async (params, usuarioId) => {
     );
   }
 };
+
+export const updateProducto = async (productoId, params, usuarioId) => {
+  try {
+    const { categoriaId, nombre, descripcion, precio } = params;
+
+    const data = await fetch(`${API_URL}/productos/${productoId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        categoriaId,
+        nombre,
+        descripcion,
+        precio,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    }).then((data) => data.json());
+
+    return data;
+  } catch (error) {
+    console.error(`Error in updateProducto: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};
+
+export const deleteProducto = async (productoId, usuarioId) => {
+  try {
+    const data = await fetch(`${API_URL}/productos/${productoId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        isDisabled: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    }).then((data) => data.json());
+
+    return data;
+  } catch (error) {
+    console.error(`Error in deleteProducto: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};
