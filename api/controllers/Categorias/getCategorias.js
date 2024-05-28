@@ -2,7 +2,9 @@ const { sql } = require('../../utils/db')
 
 const getCategorias = async (req, res) => {
   try {
-    const rows = await sql.select('CategoriaProducto') ?? []
+    const rows = (await sql.select('CategoriaProducto')) ?? []
+
+    console.log('resultado', rows)
 
     res.json(rows)
   } catch (error) {

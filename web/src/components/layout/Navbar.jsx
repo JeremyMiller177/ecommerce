@@ -42,7 +42,7 @@ export const Navbar = () => {
                 className="img-fluid"
                 src={shoppingCart}
               />
-              <h3 className="text-white pt-3">MillerShop</h3>
+              <h3 className="text-white pt-3">FashionHub</h3>
             </div>
           </Link>
 
