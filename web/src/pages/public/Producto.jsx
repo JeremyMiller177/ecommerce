@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { deleteProducto, getProducto } from "../../api/productos";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { getProducto } from "../../api/productos";
+import { Link, useParams } from "react-router-dom";
 import noImage from "../../assets/img/no-image.png";
 import shoppingCartIcon from "../../assets/img/shopping-cart-icon.png";
 import "./../styles.css";
@@ -11,20 +11,17 @@ import ReactStars from "react-rating-stars-component";
 import { useSession } from "../../hooks/useSession";
 import ReCAPTCHA from "react-google-recaptcha";
 import { RECAPTCHA_SITE_KEY } from "../../utils/env";
-import { can } from "../../utils/can";
 
 export const Producto = () => {
   const { id } = useParams();
   const { addItem } = useCart();
   const { session } = useSession();
-  const navigate = useNavigate();
 
   const [producto, setProducto] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [resenas, setResenas] = useState([]);
   const [captcha, setCaptcha] = useState(null);
-  const [userCan, setUserCan] = useState(false);
 
   const [values, setValues] = useState({
     calificacion: 5,
@@ -85,16 +82,6 @@ export const Producto = () => {
     setLoading(false);
   };
 
-  const handleDelete = async () => {
-    setLoading(true);
-
-    await deleteProducto(id, session?.user?.id);
-
-    toast.success("El producto ha sido eliminado correctamente.");
-    navigate("/productos");
-    setLoading(false);
-  };
-
   const parseDate = (date) => {
     const fecha = new Date(date);
     const dia = fecha.getDate().toString().padStart(2, "0");
@@ -110,12 +97,14 @@ export const Producto = () => {
     setLoading(false);
   }, [id]);
 
-  useEffect(() => {
-    can(session?.user?.id, "EDITAR_PRODUCTO").then((res) => setUserCan(res));
-  }, [session?.user?.id]);
-
   if (loading || !producto) {
-    return;
+    return (
+      <div style={{ minHeight: "100vh" }}>
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -152,28 +141,7 @@ export const Producto = () => {
 
           <div className="d-flex flex-column justify-content-between card-body shadow-lg h-100 w-50">
             <div className="h-100">
-              <div className="d-flex justify-content-between">
-                <h2 className="card-title">{producto?.nombre}</h2>
-
-                {userCan && (
-                  <div className="d-flex gap-3">
-                    <Link to={`/editar-producto/${id}`}>
-                      <button className="btn btn-outline-primary">
-                        Editar
-                      </button>
-                    </Link>
-
-                    <Link to="#">
-                      <button
-                        className="btn btn-outline-danger"
-                        onClick={handleDelete}
-                      >
-                        Eliminar
-                      </button>
-                    </Link>
-                  </div>
-                )}
-              </div>
+              <h2 className="card-title">{producto?.nombre}</h2>
 
               <p className="card-text">{producto?.descripcion}</p>
 
