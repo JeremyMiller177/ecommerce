@@ -72,9 +72,12 @@ export const CrearProducto = () => {
   }, []);
 
   return (
-    <div className="container d-flex flex-column gap-3 mb-5">
+    <div
+      className="container d-flex flex-column gap-3 mb-5"
+      style={{ minHeight: "100vh" }}
+    >
       <div className="card border-0 shadow-lg bg-light p-3">
-        <h1>Crear producto</h1>
+        <h1>Crear Producto</h1>
 
         <div className="d-flex flex-row">
           <form className="w-100" onSubmit={handleSubmit}>

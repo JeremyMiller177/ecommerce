@@ -1,11 +1,12 @@
 import toast from "react-hot-toast";
 import { API_URL } from "../utils/env";
 
-export const getCategorias = async () => {
+export const getUsuarios = async (userId) => {
   try {
-    const response = await fetch(`${API_URL}/categorias`, {
+    const response = await fetch(`${API_URL}/usuarios`, {
       headers: {
         "Content-Type": "application/json",
+        usuario_id: userId,
       },
     });
 
@@ -19,18 +20,19 @@ export const getCategorias = async () => {
 
     return data;
   } catch (error) {
-    console.error(`Error in getCategorias: ${error}`);
+    console.error(`Error in getUsuarios: ${error}`);
     toast.error(
       "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
     );
   }
 };
 
-export const getCategoria = async (id) => {
+export const getUsuario = async (id, userId) => {
   try {
-    const response = await fetch(`${API_URL}/categorias/${id}`, {
+    const response = await fetch(`${API_URL}/usuarios/${id}`, {
       headers: {
         "Content-Type": "application/json",
+        usuario_id: userId,
       },
     });
 
@@ -44,40 +46,73 @@ export const getCategoria = async (id) => {
 
     return data;
   } catch (error) {
-    console.error(`Error in getCategoria: ${error}`);
+    console.error(`Error in getUsuario: ${error}`);
     toast.error(
       "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
     );
   }
 };
 
-export const createCategoria = async (params, usuarioId) => {
+export const crearUsuario = async (params) => {
   try {
-    const { nombre } = params;
+    const { nombre, email, contrasena, direccion, ciudad, telefono } = params;
 
-    const data = await fetch(`${API_URL}/categorias`, {
+    const data = await fetch(`${API_URL}/auth/registro`, {
       method: "POST",
       body: JSON.stringify({
         nombre,
+        email,
+        contrasena,
+        direccion,
+        ciudad,
+        telefono,
       }),
       headers: {
         "Content-Type": "application/json",
-        usuario_id: usuarioId,
       },
     }).then((data) => data.json());
 
     return data;
   } catch (error) {
-    console.error(`Error in createCategoria: ${error}`);
+    console.error(`Error in crearUsuario: ${error}`);
     toast.error(
       "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
     );
   }
 };
 
-export const deleteCategoria = async (categoriaId, usuarioId) => {
+export const updateUsuario = async (id, params, usuarioId) => {
   try {
-    const data = await fetch(`${API_URL}/categorias/${categoriaId}`, {
+    const { nombre, email, direccion, ciudad, pais, telefono } = params;
+
+    await fetch(`${API_URL}/usuarios/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        nombre,
+        email,
+        direccion,
+        ciudad,
+        pais,
+        telefono,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        usuario_id: usuarioId,
+      },
+    });
+
+    return "Exito";
+  } catch (error) {
+    console.error(`Error in updateUsuario: ${error}`);
+    toast.error(
+      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
+    );
+  }
+};
+
+export const deleteUsuario = async (productoId, usuarioId) => {
+  try {
+    const data = await fetch(`${API_URL}/usuarios/${productoId}`, {
       method: "PUT",
       body: JSON.stringify({
         isDisabled: true,
@@ -90,31 +125,7 @@ export const deleteCategoria = async (categoriaId, usuarioId) => {
 
     return data;
   } catch (error) {
-    console.error(`Error in deleteCategoria: ${error}`);
-    toast.error(
-      "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
-    );
-  }
-};
-
-export const updateCategoria = async (categoriaId, params, usuarioId) => {
-  try {
-    const { nombre } = params;
-
-    const data = await fetch(`${API_URL}/categorias/${categoriaId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        nombre,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        usuario_id: usuarioId,
-      },
-    }).then((data) => data.json());
-
-    return data;
-  } catch (error) {
-    console.error(`Error in updateProducto: ${error}`);
+    console.error(`Error in deleteProducto: ${error}`);
     toast.error(
       "Ha ocurrido un error. Intente de nuevo o contacte un administrador."
     );

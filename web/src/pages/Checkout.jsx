@@ -123,8 +123,16 @@ export const Checkout = () => {
   }
 
   return (
-    <div className="container d-flex flex-column gap-3 mb-5">
-      <h1>Checkout</h1>
+    <div
+      className="container d-flex flex-column gap-3 mb-5"
+      style={{ minHeight: "100vh" }}
+    >
+      <h1
+        className="p-3 rounded text-white"
+        style={{ backgroundColor: "#564641" }}
+      >
+        Checkout
+      </h1>
 
       <div className="d-flex flex-row card border-0 shadow-lg w-100">
         <div className="w-50 p-5">

@@ -1,27 +1,28 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import { RECAPTCHA_SITE_KEY } from "../utils/env";
 import { useState, useEffect } from "react";
-import { getCategorias } from "../api/categorias";
 import toast from "react-hot-toast";
-import { getProducto, updateProducto } from "../api/productos";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
 import { can } from "../utils/can";
+import { getUsuario, updateUsuario } from "../api/usuarios";
 
-export const EditarProducto = () => {
+export const EditarUsuario = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const [categorias, setCategorias] = useState([]);
   const [captcha, setCaptcha] = useState(null);
   const [loading, setLoading] = useState(false);
   const { session } = useSession();
+  const userId = session?.user?.id;
 
   const [values, setValues] = useState({
-    categoriaId: undefined,
     nombre: "",
-    descripcion: "",
-    precio: "",
+    email: "",
+    direccion: "",
+    ciudad: "",
+    pais: "",
+    telefono: "",
   });
 
   const handleReCaptcha = (value) => {
@@ -33,7 +34,7 @@ export const EditarProducto = () => {
 
     setLoading(true);
 
-    const userCan = await can(session?.user?.id, "EDITAR_PRODUCTO");
+    const userCan = await can(session?.user?.id, "EDITAR_USUARIO");
 
     if (!userCan) {
       return toast.error(
@@ -41,25 +42,23 @@ export const EditarProducto = () => {
       );
     }
 
-    const { categoriaId, nombre, descripcion, precio } = values;
+    const { nombre, email, direccion, ciudad, pais, telefono } = values;
 
-    if (!categoriaId || categoriaId === "Selecciona una categoría") {
-      return toast.error("Selecciona una categoría");
-    }
-
-    await updateProducto(
+    await updateUsuario(
       id,
       {
-        categoriaId,
         nombre,
-        descripcion,
-        precio,
+        email,
+        direccion,
+        ciudad,
+        pais,
+        telefono,
       },
       session?.user?.id
     );
 
-    toast.success("El producto ha sido actualizado correctamente.");
-    navigate("/productos");
+    toast.success("El Usuario ha sido actualizado correctamente.");
+    navigate("/admin/usuarios");
     setLoading(false);
   };
 
@@ -71,47 +70,26 @@ export const EditarProducto = () => {
   };
 
   useEffect(() => {
-    getProducto(id).then((data) => {
+    getUsuario(id, userId).then((data) => {
       setValues({
-        categoriaId: data.categoria_id,
         nombre: data.nombre,
-        descripcion: data.descripcion,
-        precio: data.precio,
+        email: data.email,
+        direccion: data.direccion,
+        ciudad: data.ciudad,
+        pais: data.pais,
+        telefono: data.telefono,
       });
     });
-    getCategorias().then((data) => setCategorias(data));
-  }, [id]);
+  }, [id, userId]);
 
   return (
-    <div
-      className="container d-flex flex-column gap-3 mb-5"
-      style={{ minHeight: "100vh" }}
-    >
+    <div className="container d-flex flex-column gap-3 mb-5">
       <div className="card border-0 shadow-lg bg-light p-3">
-        <h1>Editar producto</h1>
+        <h1>Editar Usuario</h1>
 
         <div className="d-flex flex-row">
           <form className="w-100" onSubmit={handleSubmit}>
             <div className="border-bottom mb-2"></div>
-
-            <label>Categoría</label>
-            <select
-              className="form-select mb-4"
-              aria-label="Categorías"
-              id="categoriaId"
-              name="categoriaId"
-              required
-              value={values?.categoriaId}
-              onChange={handleChange}
-            >
-              <option selected>Selecciona una categoría</option>
-              {categorias.map((categoria) => (
-                <option key={categoria.id} value={categoria.id}>
-                  {categoria.nombre.charAt(0).toUpperCase() +
-                    categoria.nombre.slice(1)}
-                </option>
-              ))}
-            </select>
 
             <div className="mb-3">
               <label htmlFor="nombre" className="form-label">
@@ -129,32 +107,78 @@ export const EditarProducto = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="descripcion" className="form-label">
-                Descripción
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="descripcion"
-                name="descripcion"
+                disabled
+                id="email"
+                name="email"
                 required
                 onChange={handleChange}
-                value={values?.descripcion}
+                value={values?.email}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="direccion" className="form-label">
+                Direccion
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="direccion"
+                name="direccion"
+                required
+                onChange={handleChange}
+                value={values?.direccion}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="ciudad" className="form-label">
+                Ciudad
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="ciudad"
+                name="ciudad"
+                required
+                onChange={handleChange}
+                value={values?.ciudad}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="pais" className="form-label">
+                Pais
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="pais"
+                name="pais"
+                required
+                onChange={handleChange}
+                value={values?.pais}
               />
             </div>
 
             <div className="mb-3">
               <label htmlFor="telefono" className="form-label">
-                Precio
+                Telefono
               </label>
               <input
                 type="number"
                 className="form-control"
-                id="precio"
-                name="precio"
+                id="telefono"
+                name="telefono"
                 required
                 onChange={handleChange}
-                value={values?.precio}
+                value={values?.telefono}
               />
             </div>
 

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { deleteProducto, getProducto } from "../api/productos";
+import { deleteProducto, getProducto } from "../../api/productos";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import noImage from "../assets/img/no-image.png";
-import shoppingCartIcon from "../assets/img/shopping-cart-icon.png";
-import "./styles.css";
-import { useCart } from "../hooks/useCart";
+import noImage from "../../assets/img/no-image.png";
+import shoppingCartIcon from "../../assets/img/shopping-cart-icon.png";
+import "./../styles.css";
+import { useCart } from "../../hooks/useCart";
 import toast from "react-hot-toast";
-import { createResena, getResenas } from "../api/resenas";
+import { createResena, getResenas } from "../../api/resenas";
 import ReactStars from "react-rating-stars-component";
-import { useSession } from "../hooks/useSession";
+import { useSession } from "../../hooks/useSession";
 import ReCAPTCHA from "react-google-recaptcha";
-import { RECAPTCHA_SITE_KEY } from "../utils/env";
-import { can } from "../utils/can";
+import { RECAPTCHA_SITE_KEY } from "../../utils/env";
+import { can } from "../../utils/can";
 
 export const Producto = () => {
   const { id } = useParams();
@@ -120,12 +120,21 @@ export const Producto = () => {
 
   return (
     <div className="container-fluid w-75">
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
+      <nav
+        aria-label="breadcrumb"
+        style={{
+          backgroundColor: "#564641",
+          borderRadius: 5,
+        }}
+      >
+        <ol className="breadcrumb p-3">
           <li className="breadcrumb-item">
-            <Link to="/productos">Productos</Link>
+            <Link to="/" style={{ color: "white" }}>
+              Productos
+            </Link>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">
+
+          <li className="breadcrumb-item active text-white" aria-current="page">
             {producto?.id}
           </li>
         </ol>
@@ -198,6 +207,7 @@ export const Producto = () => {
             <button
               onClick={handleClick}
               className="btn btn-primary d-flex justify-content-center align-items-center gap-1 w-100"
+              style={{ backgroundColor: "#564641" }}
             >
               Agregar al carrito{" "}
               <img

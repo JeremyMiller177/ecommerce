@@ -55,10 +55,13 @@ export const Carrito = () => {
 
   if (items?.length === 0) {
     return (
-      <div className="container d-flex flex-column gap-3 mb-5">
+      <div
+        className="container d-flex flex-column gap-3 mb-5"
+        style={{ minHeight: "100vh" }}
+      >
         <h1>Carrito</h1>
 
-        <label>
+        <label className="text-white">
           Tu carrito está vacío. Agrega algunos productos para continuar.
         </label>
       </div>
@@ -66,8 +69,16 @@ export const Carrito = () => {
   }
 
   return (
-    <div className="container d-flex flex-column gap-3 mb-5">
-      <h1>Carrito</h1>
+    <div
+      className="container d-flex flex-column gap-3 mb-5"
+      style={{ minHeight: "100vh" }}
+    >
+      <h1
+        className="p-3 rounded text-white"
+        style={{ backgroundColor: "#564641" }}
+      >
+        Carrito
+      </h1>
 
       <div className="d-flex flex-row card border-0 shadow-lg w-100">
         <div className="w-50 p-5">

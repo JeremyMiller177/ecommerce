@@ -1,5 +1,6 @@
 import { Navbar } from "./components/layout/Navbar";
 import { Productos } from "./pages/Productos";
+import { Productos as PublicProductos } from "./pages/public/Productos";
 import { Route, Routes } from "react-router-dom";
 import { InicioSesion } from "./pages/public/InicioSesion";
 import { ToasterProvider } from "./providers/toastProvider";
@@ -9,13 +10,20 @@ import {
   SessionConsumer,
 } from "./context/SessionContext";
 import { CartProvider } from "./context/CartContext";
-import { Producto } from "./pages/Producto";
 import { Checkout } from "./pages/Checkout";
 import { Carrito } from "./pages/Carrito";
 import { MisPedidos } from "./pages/MisPedidos";
 import { CrearProducto } from "./pages/CrearProducto";
 import { EditarProducto } from "./pages/EditarProducto";
 import { AdministrarPedidos } from "./pages/AdministrarPedidos";
+import { Categorias } from "./pages/Categorias";
+import { CrearCategoria } from "./pages/CrearCategoria";
+import { EditarCategoria } from "./pages/EditarCategoria";
+import { CrearUsuario } from "./pages/CrearUsuario";
+import { Usuarios } from "./pages/Usuarios";
+import { EditarUsuario } from "./pages/EditarUsuario";
+import agrovelLogo from "./assets/img/agrovel.png";
+import { Producto } from "./pages/public/Producto";
 
 function App() {
   return (
@@ -24,10 +32,13 @@ function App() {
         <SessionConsumer>
           {({ session }) => (
             <div
-              className="d-flex flex-column"
+              className="d-flex flex-column flex-grow-1"
               style={{
                 margin: 0,
                 padding: 0,
+                backgroundImage: `url(${agrovelLogo})`,
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
               }}
             >
               <Navbar />
@@ -49,28 +60,70 @@ function App() {
                   )}
 
                   {session && (
-                    <Route path="crear-producto" element={<CrearProducto />} />
+                    <Route path="admin/productos" element={<Productos />} />
                   )}
 
                   {session && (
                     <Route
-                      path="editar-producto/:id"
+                      path="admin/productos/crear"
+                      element={<CrearProducto />}
+                    />
+                  )}
+
+                  {session && (
+                    <Route
+                      path="admin/productos/editar/:id"
                       element={<EditarProducto />}
                     />
                   )}
 
                   {session && (
                     <Route
-                      path="administrar-pedidos"
+                      path="editar-categoria/:id"
+                      element={<EditarCategoria />}
+                    />
+                  )}
+
+                  {session && (
+                    <Route
+                      path="admin/administrar-pedidos"
                       element={<AdministrarPedidos />}
                     />
                   )}
 
-                  <Route path="productos" element={<Productos />} />
+                  <Route path="admin/categorias" element={<Categorias />} />
+
+                  <Route
+                    path="admin/categorias/crear"
+                    element={<CrearCategoria />}
+                  />
+
+                  <Route
+                    path="admin/categorias/editar/:id"
+                    element={<EditarCategoria />}
+                  />
+
+                  {session && (
+                    <Route path="admin/usuarios" element={<Usuarios />} />
+                  )}
+
+                  {session && (
+                    <Route
+                      path="admin/usuarios/crear"
+                      element={<CrearUsuario />}
+                    />
+                  )}
+
+                  {session && (
+                    <Route
+                      path="admin/usuarios/editar/:id"
+                      element={<EditarUsuario />}
+                    />
+                  )}
 
                   <Route path="productos/:id" element={<Producto />} />
 
-                  <Route path="*" element={<Productos />} />
+                  <Route path="*" element={<PublicProductos />} />
                 </Routes>
               </div>
             </div>

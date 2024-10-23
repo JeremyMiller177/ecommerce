@@ -49,7 +49,7 @@ export const InicioSesion = () => {
   };
 
   return (
-    <main className="container-fluid">
+    <main className="container-fluid" style={{ minHeight: "100vh" }}>
       <div className="d-flex align-items-center justify-content-center">
         <div
           className="d-flex flex-column align-items-center shadow-lg p-5 mb-5 bg-white rounded"

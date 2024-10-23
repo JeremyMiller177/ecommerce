@@ -35,7 +35,7 @@ export const AdministrarPedidos = () => {
     setPedidos(nuevosPedidos);
 
     toast.success("El estado del pedido ha sido actualizado correctamente.");
-    navigate("/administrar-pedidos");
+    navigate("/admin/administrar-pedidos");
     setLoading(false);
   };
 
@@ -68,7 +68,7 @@ export const AdministrarPedidos = () => {
       if (!value) {
         toast.error("El usuario no tiene permisos para realizar esta acción.");
 
-        return navigate("/productos");
+        return navigate("/");
       }
     });
 
@@ -80,56 +80,57 @@ export const AdministrarPedidos = () => {
   }, [sessionUserId, navigate]);
 
   return (
-    <div className="container bg-white">
-      <div className="card shadow-lg p-5 m-3 border-0 mb-3">
-        <h3>Administrar pedidos</h3>
+    <div
+      className="card shadow-lg p-5 m-3 border-0 mb-3"
+      style={{ minHeight: "100vh" }}
+    >
+      <h3>Administrar Pedidos</h3>
 
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Nombre de quien recibe</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Correo electrónico</th>
-                <th>Total</th>
-                <th>Estado</th>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Nombre de quien recibe</th>
+              <th>Teléfono</th>
+              <th>Dirección</th>
+              <th>Correo electrónico</th>
+              <th>Total</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pedidos?.map((pedido) => (
+              <tr key={pedido.id}>
+                <td>{parseDate(pedido.fecha)}</td>
+                <td>{pedido.nombre}</td>
+                <td>{pedido.telefono}</td>
+                <td>{pedido.direccion}</td>
+                <td>{pedido.email}</td>
+                <td>{pedido.total}</td>
+                <td>
+                  <select
+                    className="form-select mb-4"
+                    aria-label="Estado"
+                    id="estado"
+                    name="estado"
+                    value={pedido?.estado}
+                    onChange={(e) => handleChange(pedido.id, e.target.value)}
+                    disabled={loading}
+                  >
+                    <option selected>Selecciona un estado</option>
+                    {estados.map((estado) => (
+                      <option key={estado.id} value={estado.id}>
+                        {estado.nombre.charAt(0).toUpperCase() +
+                          estado.nombre.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {pedidos?.map((pedido) => (
-                <tr key={pedido.id}>
-                  <td>{parseDate(pedido.fecha)}</td>
-                  <td>{pedido.nombre}</td>
-                  <td>{pedido.telefono}</td>
-                  <td>{pedido.direccion}</td>
-                  <td>{pedido.email}</td>
-                  <td>{pedido.total}</td>
-                  <td>
-                    <select
-                      className="form-select mb-4"
-                      aria-label="Estado"
-                      id="estado"
-                      name="estado"
-                      value={pedido?.estado}
-                      onChange={(e) => handleChange(pedido.id, e.target.value)}
-                      disabled={loading}
-                    >
-                      <option selected>Selecciona un estado</option>
-                      {estados.map((estado) => (
-                        <option key={estado.id} value={estado.id}>
-                          {estado.nombre.charAt(0).toUpperCase() +
-                            estado.nombre.slice(1)}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

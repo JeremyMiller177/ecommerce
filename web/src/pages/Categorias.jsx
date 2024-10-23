@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { getProductos, deleteProducto } from "../api/productos"; // Importar deleteProducto
+import { getCategorias, deleteCategoria } from "../api/categorias";
 import { Link } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
+import toast from "react-hot-toast";
 
-export const Productos = ({ title = "Productos" }) => {
+export const Categorias = ({ title = "Categorias" }) => {
   const { session } = useSession();
-  const [productos, setProductos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // Estado para el modal
-  const [productoAEliminar, setProductoAEliminar] = useState(null); // Estado para el producto a eliminar
+  const [eliminarId, setEliminarId] = useState(null); // Estado para el producto a eliminar
 
   useEffect(() => {
-    getProductos()
+    getCategorias()
       .then((data) => {
-        setProductos(data);
+        setCategorias(data);
       })
       .catch((error) => {
         console.error("Error al obtener los productos:", error);
@@ -23,24 +24,19 @@ export const Productos = ({ title = "Productos" }) => {
       });
   }, []);
 
-  const handleEliminar = (id) => {
-    setProductoAEliminar(id); // Guardar el id del producto a eliminar
-    setShowModal(true); // Mostrar el modal
-  };
-
   const confirmarEliminacion = async () => {
-    if (!productoAEliminar) return;
+    if (!eliminarId) return;
 
     try {
-      await deleteProducto(productoAEliminar, session?.user?.id);
-      alert("Producto eliminado con éxito.");
+      await deleteCategoria(eliminarId, session?.user?.id);
+      toast.success("Categoría eliminada con éxito.");
       window.location.reload();
     } catch (error) {
-      console.error("Error al eliminar el producto:", error);
-      alert("Hubo un error al eliminar el producto.");
+      console.error("Error al eliminar la categoría:", error);
+      toast.error("Hubo un error al eliminar la categoría.");
     } finally {
       setShowModal(false);
-      setProductoAEliminar(null);
+      setEliminarId(null);
     }
   };
 
@@ -66,10 +62,10 @@ export const Productos = ({ title = "Productos" }) => {
         <h1 className="text-left text-white">{title}</h1>
         <button className="btn btn-primary">
           <Link
-            to="/admin/productos/crear"
+            to="/admin/categorias/crear"
             className="text-white text-decoration-none"
           >
-            Nuevo Producto
+            Nueva Categoría
           </Link>
         </button>
       </div>
@@ -80,47 +76,20 @@ export const Productos = ({ title = "Productos" }) => {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Imagen</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody className="text-center">
-            {productos.map((producto) => (
-              <tr key={producto.id}>
-                <td>{producto.id}</td>
-                <td>{producto.nombre}</td>
-                <td>{producto.descripcion}</td>
-                <td>
-                  {producto.precio
-                    ? typeof producto.precio === "string"
-                      ? `$${producto.precio}`
-                      : `$${producto.precio.toFixed(2)}`
-                    : "N/A"}
-                </td>
-                <td>{producto.stock}</td>
-                <td>
-                  <img
-                    alt={producto.imagen_url}
-                    src={producto.imagen_url}
-                    height={50}
-                    width={50}
-                  />
-                </td>
+            {categorias.map((categoria) => (
+              <tr key={categoria.id}>
+                <td>{categoria.id}</td>
+                <td>{categoria.nombre}</td>
+
                 <td>
                   <div className="container d-flex justify-content-center align-items-center gap-2">
-                    <Link to={`/admin/productos/editar/${producto.id}`}>
+                    <Link to={`/admin/categorias/editar/${categoria.id}`}>
                       <button className="btn btn-primary">Editar</button>
                     </Link>
-
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleEliminar(producto.id)} //
-                    >
-                      Eliminar
-                    </button>
                   </div>
                 </td>
               </tr>
@@ -150,7 +119,7 @@ export const Productos = ({ title = "Productos" }) => {
                 </button>
               </div>
               <div className="modal-body">
-                <p>¿Estás seguro de que deseas eliminar este producto?</p>
+                <p>¿Estás seguro de que deseas eliminar esta categoría?</p>
               </div>
               <div className="modal-footer">
                 <button

@@ -1,18 +1,14 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import shoppingCart from "../../assets/img/shopping-cart.png";
 import shoppingCartIcon from "../../assets/img/shopping-cart-icon.png";
 import avatar from "../../assets/img/default-avatar.svg";
+import agrovelLogo from "../../assets/img/agrovel.png";
 import { useSession } from "../../hooks/useSession";
 import { useCart } from "../../hooks/useCart";
-import { can } from "../../utils/can";
-import { useEffect, useState } from "react";
 
 export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { session, clearSession } = useSession();
-  const [userCan, setUserCan] = useState(false);
-  const [userCanAdminPedidos, setUserCanAdminPedidos] = useState(false);
   const { items } = useCart();
 
   const handleClick = () => {
@@ -20,79 +16,78 @@ export const Navbar = () => {
     navigate("/productos");
   };
 
-  useEffect(() => {
-    can(session?.user?.id, "CREAR_PRODUCTO").then((res) => setUserCan(res));
-    can(session?.user?.id, "EDITAR_PEDIDO").then((res) =>
-      setUserCanAdminPedidos(res)
-    );
-  }, [session?.user?.id]);
+  const permisos = session?.user?.rol?.permisos?.split(",");
 
   return (
     <div
       style={{
-        backgroundColor: "#4b32a8",
+        backgroundColor: "#564641",
       }}
     >
       <nav className="align-items-center justify-content-between nav d-flex p-2">
         <div className="d-flex align-items-center justify-content-center gap-3">
-          <Link className="text-decoration-none" to="/productos">
-            <div className="d-flex">
+          <Link className="text-decoration-none" to="/">
+            <div className="d-flex align-items-center gap-3 p-3">
               <img
-                alt="shopping-cart"
-                className="img-fluid"
-                src={shoppingCart}
+                alt="logo"
+                className="rounded-circle"
+                src={agrovelLogo}
+                width={60}
               />
-              <h3 className="text-white pt-3">FashionHub</h3>
+
+              <h4 className="text-white">Agrovel</h4>
             </div>
           </Link>
 
-          <Link
-            className={`nav-link rounded-5 text-center ${
-              location.pathname === "/productos"
-                ? "bg-light text-dark"
-                : "text-white"
-            }`}
-            to="/productos"
-          >
-            Productos
-          </Link>
-
-          {session && (
+          {permisos?.includes("VER_CATEGORIAS") && (
             <Link
               className={`nav-link rounded-5 text-center ${
-                location.pathname === "/mis-pedidos"
+                location.pathname === "/admin/categorias"
                   ? "bg-light text-dark"
                   : "text-white"
               }`}
-              to="/mis-pedidos"
+              to="/admin/categorias"
             >
-              Mis pedidos
+              Categorias
             </Link>
           )}
 
-          {userCan && (
+          {permisos?.includes("VER_PRODUCTOS") && (
             <Link
               className={`nav-link rounded-5 text-center ${
-                location.pathname === "/crear-producto"
+                location.pathname === "/admin/productos"
                   ? "bg-light text-dark"
                   : "text-white"
               }`}
-              to="/crear-producto"
+              to="/admin/productos"
             >
-              Crear producto
+              Productos
             </Link>
           )}
 
-          {userCanAdminPedidos && (
+          {permisos?.includes("VER_USUARIOS") && (
             <Link
               className={`nav-link rounded-5 text-center ${
-                location.pathname === "/administrar-pedidos"
+                location.pathname === "/admin/usuarios"
                   ? "bg-light text-dark"
                   : "text-white"
               }`}
-              to="/administrar-pedidos"
+              to="/admin/usuarios"
             >
-              Administrar pedidos
+              Usuarios
+            </Link>
+          )}
+
+          {permisos?.includes("EDITAR_PEDIDO") && (
+            <Link
+              className={`nav-link rounded-5 text-center ${
+                location.pathname === "/admin/administrar-pedidos"
+                  ? "bg-light text-dark"
+                  : "text-white"
+              }`}
+              to="/admin/administrar-pedidos"
+            >
+              Administrar Pedidos
             </Link>
           )}
         </div>
@@ -132,6 +127,20 @@ export const Navbar = () => {
                     </span>
                   </label>
                 </li>
+
+                {session && (
+                  <Link
+                    className={`nav-link rounded-5 ${
+                      location.pathname === "/mis-pedidos"
+                        ? "bg-light text-dark"
+                        : "text-black"
+                    }`}
+                    to="/mis-pedidos"
+                  >
+                    Mis pedidos
+                  </Link>
+                )}
+
                 <li>
                   <button className="dropdown-item" onClick={handleClick}>
                     Cerrar sesión

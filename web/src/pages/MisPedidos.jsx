@@ -22,41 +22,42 @@ export const MisPedidos = () => {
   }, [sessionUserId]);
 
   return (
-    <div className="container bg-white">
-      <div className="card shadow-lg p-5 m-3 border-0 mb-3">
-        <h3>Pedidos</h3>
+    <div
+      className="card shadow-lg p-5 m-3 border-0 mb-3"
+      style={{ minHeight: "100vh" }}
+    >
+      <h3>Pedidos</h3>
 
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Nombre de quien recibe</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Correo electrónico</th>
-                <th>Total</th>
-                <th>Estado</th>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Nombre de quien recibe</th>
+              <th>Teléfono</th>
+              <th>Dirección</th>
+              <th>Correo electrónico</th>
+              <th>Total</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pedidos?.map((pedido) => (
+              <tr key={pedido.id}>
+                <td>{parseDate(pedido.fecha)}</td>
+                <td>{pedido.nombre}</td>
+                <td>{pedido.telefono}</td>
+                <td>{pedido.direccion}</td>
+                <td>{pedido.email}</td>
+                <td>{pedido.total}</td>
+                <td>
+                  {pedido?.estado?.charAt(0).toUpperCase() +
+                    pedido?.estado?.slice(1)}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {pedidos?.map((pedido) => (
-                <tr key={pedido.id}>
-                  <td>{parseDate(pedido.fecha)}</td>
-                  <td>{pedido.nombre}</td>
-                  <td>{pedido.telefono}</td>
-                  <td>{pedido.direccion}</td>
-                  <td>{pedido.email}</td>
-                  <td>{pedido.total}</td>
-                  <td>
-                    {pedido?.estado?.charAt(0).toUpperCase() +
-                      pedido?.estado?.slice(1)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
